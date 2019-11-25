@@ -41,7 +41,7 @@ foo(void *args_void)
         MsgBuf msgbuf;
 
         args = (Args *)args_void;
-        if (msgrcv(args->msgid, &msgbuf, 0, args->thread_id, 0)) {
+        if (msgrcv(args->msgid, &msgbuf, 0, args->thread_id, 0) < 0) {
                 perror("msgrcv");
                 exit(errno);
         }
@@ -59,8 +59,8 @@ int
 main(int argc, char *argv[])
 {
         int nthreads; /* Number of threads. */
-        pthread_t *threads;
-        Args *threads_args;
+        pthread_t threads[NTHREADS_MAX];
+        Args threads_args[NTHREADS_MAX];
         int msgid;
         MsgBuf msgbuf;
 
@@ -107,14 +107,6 @@ main(int argc, char *argv[])
                 perror("msgsnd");
                 exit(errno);
         }
-        if ((threads = (pthread_t *)malloc(nthreads * sizeof(*threads))) == NULL) {
-                perror("malloc");
-                exit(errno);
-        }
-        if ((threads_args = (Args *)malloc(nthreads * sizeof(*threads_args))) == NULL) {
-                perror("malloc");
-                exit(errno);
-        }
         for (int i = 0; i < nthreads; ++i) {
                 threads_args[i] = (Args){i + 1, msgid};
                 if (pthread_create(&threads[i], NULL, foo, &threads_args[i])) {
@@ -122,8 +114,7 @@ main(int argc, char *argv[])
                         exit(errno);
                 }
         }
-
-        if (msgrcv(msgid, &msgbuf, 0, nthreads + 1, 0)) {
+        if (msgrcv(msgid, &msgbuf, 0, nthreads + 1, 0) < 0) {
                perror("msgrcv");
                exit(errno);
         }
@@ -140,8 +131,6 @@ main(int argc, char *argv[])
                 perror("msgctl");
                 exit(errno);
         }
-        free(threads_args);
-        free(threads);
 
         exit(EXIT_SUCCESS);
 }
