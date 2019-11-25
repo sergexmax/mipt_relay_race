@@ -8,31 +8,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* Error codes. */
 enum {
         WRONG_FORMAT = -2,
         WRONG_USAGE = -3,
         OUT_OF_RANGE = -4
 };
 
-/* the default, minimal and maximal 'nthreads' value */
+/* The default, minimal and maximal 'nthreads' value. */
 #define NTHREADS_DEF 10
 #define NTHREADS_MAX 100
 #define NTHREADS_MIN 1
 
 #define PRINT_USAGE_HINT() printf("Usage: %s [-n nthreads (1:100)].\n", argv[0])
 
-/* args for the thread function 'foo' */
+/* Args for the thread function 'foo'. */
 typedef struct {
         int thread_id;
         int msgid;
 } Args;
 
-/* message buffer */
+/* A message buffer. */
 typedef struct {
         long mtype;
 } MsgBuf;
 
-/* a thread function that prints a thread id */
+/* A thread function that prints a thread id. */
 void *
 foo(void *args_void)
 {
@@ -57,13 +58,13 @@ foo(void *args_void)
 int
 main(int argc, char *argv[])
 {
-        int nthreads; /* Number of threads */
+        int nthreads; /* Number of threads. */
         pthread_t *threads;
         Args *threads_args;
         int msgid;
         MsgBuf msgbuf;
 
-        { /* Parse options */
+        { /* Parse options. */
                 int opt;
                 bool n_found;
 
