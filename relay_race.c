@@ -98,7 +98,7 @@ main(int argc, char *argv[])
                 }
         }
 
-        if ((msgid = msgget(IPC_PRIVATE, IPC_CREAT | 0666) < 0)) {
+        if ((msgid = msgget(IPC_PRIVATE, IPC_CREAT | 0666)) < 0) {
                 perror("msgget");
                 exit(errno);
         }
