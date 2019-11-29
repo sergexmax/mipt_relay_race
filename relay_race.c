@@ -1,5 +1,3 @@
-/* See the LICENSE file for copyright and license details. */
-
 #include <sys/msg.h>
 #include <errno.h>
 #include <getopt.h>
@@ -22,18 +20,18 @@ enum {
 
 #define PRINT_USAGE_HINT() printf("Usage: %s [-n nthreads (1:100)].\n", argv[0])
 
-/* Args for the thread function 'foo'. */
+/* Structure of thread function 'foo' args. */
 typedef struct {
         int thread_id;
         int msgid;
 } Args;
 
-/* A message buffer. */
+/* The message buffer. */
 typedef struct {
         long mtype;
 } MsgBuf;
 
-/* A thread function that prints a thread id. */
+/* The thread function that prints the thread id. */
 void *
 foo(void *args_void)
 {
@@ -58,7 +56,7 @@ foo(void *args_void)
 int
 main(int argc, char *argv[])
 {
-        int nthreads; /* Number of threads. */
+        int nthreads; /* A number of threads. */
         pthread_t threads[NTHREADS_MAX];
         Args threads_args[NTHREADS_MAX];
         int msgid;
@@ -93,9 +91,8 @@ main(int argc, char *argv[])
                                 break;
                         }
                 }
-                if (!n_found) {
+                if (!n_found)
                         nthreads = NTHREADS_DEF;
-                }
         }
 
         if ((msgid = msgget(IPC_PRIVATE, IPC_CREAT | 0666)) < 0) {
